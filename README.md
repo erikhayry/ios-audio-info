@@ -46,7 +46,7 @@ window.plugins.iOSAudioInfo.getTracks(success,error);
 Returns an array with a song object including the image if there is one
 
 ````
-window.plugins.iOSAudioInfo.getTracks(success,error,trackId);
+window.plugins.iOSAudioInfo.getTrack(success,error,trackId);
 ````
 
 
