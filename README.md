@@ -23,7 +23,7 @@ window.plugins.iOSAudioInfo.getTracks(success,error);
 
 
 
-  success - will be called when songs are exported. You can get the array of songs list using this
+  success - will be called when songs are exported. You can get the array of songs like this
   
 ```
     function success(data)
@@ -50,7 +50,7 @@ window.plugins.iOSAudioInfo.getTrack(success,error,trackId);
 ````
 
 
-  success - will be called when songs are exported. You can get the array of songs list using this
+  success - will be called when songs are exported. You can get the array of songs like this
   
 ```
     function success(data)
@@ -78,7 +78,7 @@ Include [ngCordova](http://ngcordova.com/) and
 
 ```
     document.addEventListener('deviceready', function () {
-        window.plugins.iOSAudioInfo.getTracks(success,error,trackId);
+        window.plugins.iOSAudioInfo.getTrack(success,error,trackId);
     }, false);
         
 ```
