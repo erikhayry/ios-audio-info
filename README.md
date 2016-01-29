@@ -4,7 +4,7 @@ Thanks to [Rahul Pandey](https://github.com/an-rahulpandey) and his plugin [me.r
 
 # Description
 
-The plugin gives you track information from you iOS device using the MPMediaQuery class.
+The plugin gives you track information (iTunes/iPod library) from you iOS device using the MPMediaQuery class.
 
 ### Installation
 
@@ -14,7 +14,7 @@ The plugin gives you track information from you iOS device using the MPMediaQuer
 
 - **To get all the songs from the music library**
 
-Returns an array with song objects NOT including the image (use the id and getTrack method if you need the image)
+Returns an array with song objects NOT including the image (use the trackId and getTrack method if you need the image)
 
 
 ````
@@ -80,4 +80,9 @@ Include [ngCordova](http://ngcordova.com/) and
     document.addEventListener('deviceready', function () {
         window.plugins.iOSAudioInfo.getTracks(success,error,trackId);
     }, false);
+        
 ```
+
+# TODO
+
+Background threading (the plugin is quite slow), search for song(s) using keywords, return song file, demo, return more track informartion, pagination, sorting, Android support, replicate more [MPMediaQuery methods/features](https://developer.apple.com/library/prerelease/ios/documentation/MediaPlayer/Reference/MPMediaQuery_ClassReference/index.html)...
