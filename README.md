@@ -43,7 +43,7 @@ window.plugins.iOSAudioInfo.getTracks(success,error);
 
 - **To get a song from the music library**
 
-Returns an object with a song object, including the image if there is one.
+Returns an array with a song object including the image if there is one
 
 ````
 window.plugins.iOSAudioInfo.getTrack(success,error,trackId);
@@ -85,4 +85,4 @@ Include [ngCordova](http://ngcordova.com/) and
 
 # TODO
 
-Search for song(s) using keywords, return song file, demo, pagination, sorting, Android support, replicate more [MPMediaQuery methods/features](https://developer.apple.com/library/prerelease/ios/documentation/MediaPlayer/Reference/MPMediaQuery_ClassReference/index.html)...
+Background threading (the plugin is quite slow), search for song(s) using keywords, return song file, demo, return more track informartion, pagination, sorting, Android support, replicate more [MPMediaQuery methods/features](https://developer.apple.com/library/prerelease/ios/documentation/MediaPlayer/Reference/MPMediaQuery_ClassReference/index.html)...
