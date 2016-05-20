@@ -15,8 +15,7 @@
         for(MPMediaItem *song in itemsFromGenericQuery){
             [songsList addObject:[self buildInfo:song:NO:NO]];
         }
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:songsList];      
-        NSLog(@"The content of arry is%@",songsList); 
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:songsList];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];        
 }
@@ -87,14 +86,6 @@
     NSString *albumPersistentID = [song valueForProperty:MPMediaItemPropertyAlbumPersistentID];
     NSString *playCount = [song valueForProperty:MPMediaItemPropertyPlayCount];
     NSString *rating = [song valueForProperty:MPMediaItemPropertyRating];
-    
-    NSLog(@"title = %@",title);
-    NSLog(@"albumTitle = %@",albumTitle);
-    NSLog(@"albumArtist = %@",albumArtist);
-    NSLog(@"albumPersistentID = %@",albumPersistentID);
-    NSLog(@"artist = %@",artist);
-    NSLog(@"rating = %@",rating);
-    NSLog(@"playCount = %@",playCount);
 
     NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
 
@@ -114,7 +105,6 @@
         [info setObject:genre forKey:@"genre"];
     }
     if(persistentID !=nil && !isAlbum) {
-        NSLog(@"persistentID = %@",persistentID);
         [info setObject:[NSString stringWithFormat:@"%@", persistentID] forKey:@"persistentID"];
     }
     if(albumPersistentID !=nil) {
