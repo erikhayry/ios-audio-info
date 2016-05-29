@@ -9,6 +9,8 @@
 {
     [self.commandDelegate runInBackground:^{
         MPMediaQuery *everything = [[MPMediaQuery alloc] init];
+        [everything addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:[NSNumber numberWithInteger:MPMediaTypeMusic] forProperty:MPMediaItemPropertyMediaType]];
+
         NSArray *itemsFromGenericQuery = [everything items];
         songsList = [[NSMutableArray alloc] init];
         
