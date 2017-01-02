@@ -25,6 +25,10 @@
                 </feature>
             </config-file>
 
+            <config-file parent="NSAppleMusicUsageDescription" target="*-Info.plist">
+                <string>This app needs access to your music to find your favourites</string>
+            </config-file>
+
             <header-file src="src/ios/iOSAudioInfo.h" />
             <source-file src="src/ios/iOSAudioInfo.m" />
 
