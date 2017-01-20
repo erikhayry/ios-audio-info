@@ -8,43 +8,58 @@
 - (void) getTracks:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        MPMediaQuery *everything = [[MPMediaQuery alloc] init];
-        [everything addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:[NSNumber numberWithInteger:MPMediaTypeMusic] forProperty:MPMediaItemPropertyMediaType]];
-
-        NSArray *itemsFromGenericQuery = [everything items];
-        songsList = [[NSMutableArray alloc] init];
+        MPMediaLibraryAuthorizationStatus authorizationStatus = MPMediaLibrary.authorizationStatus;
         
-        for(MPMediaItem *song in itemsFromGenericQuery){
-            [songsList addObject:[self buildInfo:song:NO:NO]];
+        if(authorizationStatus == MPMediaLibraryAuthorizationStatusDenied){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"MPMediaLibraryAuthorizationStatusDenied"];
         }
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:songsList];
+        else{
+            MPMediaQuery *everything = [[MPMediaQuery alloc] init];
+            [everything addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:[NSNumber numberWithInteger:MPMediaTypeMusic] forProperty:MPMediaItemPropertyMediaType]];
+            
+            NSArray *itemsFromGenericQuery = [everything items];
+            songsList = [[NSMutableArray alloc] init];
+            
+            for(MPMediaItem *song in itemsFromGenericQuery){
+                [songsList addObject:[self buildInfo:song:NO:NO]];
+            }
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:songsList];
+        }
+        
+        
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    }];        
+    }];
 }
 - (void) getTrack:(CDVInvokedUrlCommand *)command
 {
-    [self.commandDelegate runInBackground:^{ 
-        NSString *persistentID = [command argumentAtIndex:0];
-        
-        if(persistentID == nil){
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No ID found"];
-        } else {
-            MPMediaItem *song;
-            MPMediaPropertyPredicate *predicate;
-            MPMediaQuery *songQuery;
-            
-            predicate = [MPMediaPropertyPredicate predicateWithValue: persistentID forProperty:MPMediaItemPropertyPersistentID];
-            songQuery = [[MPMediaQuery alloc] init];
-            [songQuery addFilterPredicate: predicate];
-            
-            if (songQuery.items.count > 0){
-                song = [songQuery.items objectAtIndex:0];
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[self buildInfo:song:YES:NO]];
-            } else {
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"track not found"];
-            }        
+    [self.commandDelegate runInBackground:^{
+        MPMediaLibraryAuthorizationStatus authorizationStatus = MPMediaLibrary.authorizationStatus;
+        if(authorizationStatus == MPMediaLibraryAuthorizationStatusDenied){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"MPMediaLibraryAuthorizationStatusDenied"];
         }
-
+        else{
+            NSString * persistentID =[command argumentAtIndex : 0];
+            
+            if(persistentID == nil){
+                pluginResult =[CDVPluginResult resultWithStatus : CDVCommandStatus_ERROR messageAsString :@"No ID found"];
+            } else {
+                MPMediaItem * song;
+                MPMediaPropertyPredicate * predicate;
+                MPMediaQuery * songQuery;
+                
+                predicate =[MPMediaPropertyPredicate predicateWithValue : persistentID forProperty : MPMediaItemPropertyPersistentID];
+                songQuery =[[MPMediaQuery alloc] init];
+                [songQuery addFilterPredicate : predicate];
+                
+                if (songQuery.items.count > 0){
+                    song =[songQuery.items objectAtIndex : 0];
+                    pluginResult =[CDVPluginResult resultWithStatus : CDVCommandStatus_OK messageAsDictionary :[self buildInfo : song : YES : NO]];
+                } else {
+                    pluginResult =[CDVPluginResult resultWithStatus : CDVCommandStatus_ERROR messageAsString :@"track not found"];
+                }
+            }
+        }
+        
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
@@ -52,26 +67,32 @@
 - (void) getAlbum:(CDVInvokedUrlCommand *)command
 {
     [self.commandDelegate runInBackground:^{
-        NSString *persistentAlbumID = [command argumentAtIndex:0];
-        if(persistentAlbumID == nil){
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No ID found"];
-        } else {
-            MPMediaItem *album;
-            MPMediaPropertyPredicate *predicate;
-            MPMediaQuery *albumQuery;
-
-            predicate = [MPMediaPropertyPredicate predicateWithValue: persistentAlbumID forProperty:MPMediaItemPropertyAlbumPersistentID];
-            albumQuery = [[MPMediaQuery alloc] init];
-            [albumQuery addFilterPredicate: predicate];
-
-            if (albumQuery.items.count > 0){
-                album = [albumQuery.items objectAtIndex:0];
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[self buildInfo:album:YES:YES]];
+        MPMediaLibraryAuthorizationStatus authorizationStatus = MPMediaLibrary.authorizationStatus;
+        if(authorizationStatus == MPMediaLibraryAuthorizationStatusDenied){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ILLEGAL_ACCESS_EXCEPTION messageAsString:@"MPMediaLibraryAuthorizationStatusDenied"];
+        }
+        else{
+            NSString *persistentAlbumID = [command argumentAtIndex:0];
+            if(persistentAlbumID == nil){
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No ID found"];
             } else {
-              pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"album not found"];
+                MPMediaItem *album;
+                MPMediaPropertyPredicate *predicate;
+                MPMediaQuery *albumQuery;
+                
+                predicate = [MPMediaPropertyPredicate predicateWithValue: persistentAlbumID forProperty:MPMediaItemPropertyAlbumPersistentID];
+                albumQuery = [[MPMediaQuery alloc] init];
+                [albumQuery addFilterPredicate: predicate];
+                
+                if (albumQuery.items.count > 0){
+                    album = [albumQuery.items objectAtIndex:0];
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[self buildInfo:album:YES:YES]];
+                } else {
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"album not found"];
+                }
             }
         }
-
+        
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
@@ -88,9 +109,9 @@
     NSString *albumPersistentID = [song valueForProperty:MPMediaItemPropertyAlbumPersistentID];
     NSString *playCount = [song valueForProperty:MPMediaItemPropertyPlayCount];
     NSString *rating = [song valueForProperty:MPMediaItemPropertyRating];
-
+    
     NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-
+    
     if(title != nil && !isAlbum) {
         [info setObject:title forKey:@"title"];
     }
@@ -120,7 +141,7 @@
     } else {
         [info setObject:[NSNumber numberWithInteger: -1] forKey:@"rating"];
     }
-
+    
     if(addImage){
         BOOL artImageFound = NO;
         NSData *imgData;
@@ -134,7 +155,7 @@
             [info setObject:[imgData base64EncodedStringWithOptions:0] forKey:@"image"];
         }
     }
-
+    
     return info;
 }
 
