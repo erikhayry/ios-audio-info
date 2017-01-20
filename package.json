@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-iosaudioinfo",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Cordova/Phonegap plugin to get song info from the iTunes Library",
   "cordova": {
     "id": "erikportin.plugins.audio-info",
